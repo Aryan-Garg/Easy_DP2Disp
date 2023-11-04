@@ -50,8 +50,8 @@ def train_val(experiment_name, model, opt, sch):
     val_every_epoch = 1
 
     txt_files="/data2/aryan/lfvr/train_inputs/Pixel4_3DP_frame_skip10"
-    train_loader = DataLoader(BroDataset(txt_files, mode='train'), batch_size=4, shuffle=True)
-    val_loader = DataLoader(BroDataset(txt_files, mode='val'), batch_size=4, shuffle=True)
+    train_loader = DataLoader(BroDataset(txt_files, mode='train'), batch_size=6, shuffle=True)
+    val_loader = DataLoader(BroDataset(txt_files, mode='val'), batch_size=6, shuffle=True)
 
     model.to(device)
 
@@ -90,11 +90,11 @@ def train_val(experiment_name, model, opt, sch):
             if best_val_loss > this_epoch_val_loss:
                 best_val_loss = this_epoch_val_loss
                 torch.save(model.state_dict(), f'./checkpoints/{experiment_name}/{epoch+1}.pth')
-                print("Best val loss:", loss.item())
+                print("Best val loss:", best_val_loss)
 
 
 if __name__ == '__main__':
-    experiment_name = 'unetPP_resnet50'
+    experiment_name = 'DP_upp_r50'
     if not os.path.exists(f"./checkpoints/{experiment_name}"):
         os.makedirs(f"./checkpoints/{experiment_name}")
 

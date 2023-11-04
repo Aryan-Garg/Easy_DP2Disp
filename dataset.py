@@ -112,9 +112,9 @@ class BroDataset(Dataset):
         depth = torch.from_numpy(np.expand_dims(depth, axis=2)).permute(2,0,1)
         dp_input = torch.from_numpy(np.concatenate((left_pd_img, right_pd_img), axis=2)).permute(2,0,1)
 
-        norm_center_img = self.transform(Image.fromarray(np.uint8(center_img)))
+        # norm_center_img = self.transform(Image.fromarray(np.uint8(center_img)))
 
-        dp_input = torch.cat([dp_input, norm_center_img], dim=0)
+        # dp_input = torch.cat([dp_input, norm_center_img], dim=0)
         # print(dp_input.shape)
         sample = {'dp_input': dp_input, 'disp': depth}
 
@@ -134,10 +134,10 @@ if __name__ == '__main__':
     dLoader = DataLoader(dataset=dataset, batch_size=1)
 
     for i, sample in enumerate(dLoader):
-        rgb = denormalize3d(sample['dp_input'][:,2:,:,:]).squeeze().permute(1,2,0).numpy()
+        # rgb = denormalize3d(sample['dp_input'][:,2:,:,:]).squeeze().permute(1,2,0).numpy()
         # print(rgb.shape, np.amax(rgb), np.amin(rgb))
         plt.imsave(f'{i+1}_right_pd.png', sample['dp_input'][0,1,:,:].numpy()*255)
         plt.imsave(f'{i+1}_left_pd.png', sample['dp_input'][0,0,:,:].numpy()*255)
         plt.imsave(f'{i+1}_depth.png', sample['depth'][0,0,:,:].numpy()*255)
-        plt.imsave(f"{i+1}_rgb.png", rgb)
+        # plt.imsave(f"{i+1}_rgb.png", rgb)
         
