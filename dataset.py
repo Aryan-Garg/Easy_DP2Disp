@@ -14,7 +14,8 @@ from torchvision.utils import make_grid
 
 
 class BroDataset(Dataset):
-    def __init__(self, txt_files, mode="train"):
+    def __init__(self, txt_files, mode="train", rgb_input=False):
+        self.rgb_input = rgb_input
         self.unrect_datapath = '/data2/raghav/datasets/Pixel4_3DP/unrectified'
         self.datapath = '/data2/raghav/datasets/Pixel4_3DP/rectified'
         self.mode = mode
@@ -112,9 +113,9 @@ class BroDataset(Dataset):
         depth = torch.from_numpy(np.expand_dims(depth, axis=2)).permute(2,0,1)
         dp_input = torch.from_numpy(np.concatenate((left_pd_img, right_pd_img), axis=2)).permute(2,0,1)
 
-        # norm_center_img = self.transform(Image.fromarray(np.uint8(center_img)))
-
-        # dp_input = torch.cat([dp_input, norm_center_img], dim=0)
+        if self.rgb_input:
+            norm_center_img = self.transform(Image.fromarray(np.uint8(center_img)))
+            dp_input = torch.cat([dp_input, norm_center_img], dim=0)
         # print(dp_input.shape)
         sample = {'dp_input': dp_input, 'disp': depth}
 
